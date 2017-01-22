@@ -1,3 +1,10 @@
+//
+// Copyright (c) 2017 Christopher Baker <https://christopherbaker.net>
+//
+// SPDX-License-Identifier:	MIT
+//
+
+
 #include "ofApp.h"
 
 
@@ -6,7 +13,7 @@ void ofApp::setup()
     ofRectangle rect(1, 2, 3, 4);
     ofJson rectJson = ofx::serialize(rect);
     ofRectangle r = ofx::deserialize<ofRectangle>(rectJson);
-//    std::cout << r << std::endl;
+    std::cout << r << std::endl;
 
     ofWindowSettings windowSettings;
     windowSettings.setPosition(ofVec2f(25, 25));
