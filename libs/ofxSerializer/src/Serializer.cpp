@@ -7,6 +7,7 @@
 
 #include "ofxSerializer.h"
 #include "ofLog.h"
+#include "ofPolyline.h"
 #include "ofRectangle.h"
 #include "ofWindowSettings.h"
 
@@ -39,18 +40,25 @@ ofRectangle deserialize(const ofJson& json)
 {
     ofRectangle out;
 
-    auto iter = json.cbegin();
-    while (iter != json.cend())
+    try
     {
-        const auto& key = iter.key();
-        const auto& value = iter.value();
+        auto iter = json.cbegin();
+        while (iter != json.cend())
+        {
+            const auto& key = iter.key();
+            const auto& value = iter.value();
 
-        if (key == "x") out.setX(value);
-        else if (key == "y") out.setY(value);
-        else if (key == "width") out.setWidth(value);
-        else if (key == "height") out.setHeight(value);
+            if (key == "x") out.setX(value);
+            else if (key == "y") out.setY(value);
+            else if (key == "width") out.setWidth(value);
+            else if (key == "height") out.setHeight(value);
 
-        ++iter;
+            ++iter;
+        }
+    }
+    catch (const std::exception& exc)
+    {
+        ofLogError("deserialize") << exc.what() << ": " << json.dump();
     }
 
     return out;
@@ -74,16 +82,24 @@ ofVec2f deserialize(const ofJson& json)
 {
     ofVec2f out;
 
-    auto iter = json.cbegin();
-    while (iter != json.cend())
+    try
     {
-        const auto& key = iter.key();
-        const auto& value = iter.value();
+        auto iter = json.cbegin();
+        while (iter != json.cend())
+        {
+            const auto& key = iter.key();
+            const auto& value = iter.value();
 
-        if (key == "x") out.x = value;
-        else if (key == "y") out.y = value;
+            if (key == "x") out.x = value;
+            else if (key == "y") out.y = value;
 
-        ++iter;
+            ++iter;
+        }
+
+    }
+    catch (const std::exception& exc)
+    {
+        ofLogError("deserialize") << exc.what() << ": " << json.dump();
     }
 
     return out;
@@ -95,18 +111,25 @@ glm::vec2 deserialize(const ofJson& json)
 {
     glm::vec2 out;
 
-    auto iter = json.cbegin();
-    while (iter != json.cend())
+    try
     {
-        const auto& key = iter.key();
-        const auto& value = iter.value();
+        auto iter = json.cbegin();
+        while (iter != json.cend())
+        {
+            const auto& key = iter.key();
+            const auto& value = iter.value();
 
-        if (key == "x") out.x = value;
-        else if (key == "y") out.y = value;
+            if (key == "x") out.x = value;
+            else if (key == "y") out.y = value;
 
-        ++iter;
+            ++iter;
+        }
     }
-    
+    catch (const std::exception& exc)
+    {
+        ofLogError("deserialize") << exc.what() << ": " << json.dump();
+    }
+
     return out;
 }
 
@@ -130,19 +153,27 @@ ofVec3f deserialize(const ofJson& json)
 {
     ofVec3f out;
 
-    auto iter = json.cbegin();
-    while (iter != json.cend())
+    try
     {
-        const auto& key = iter.key();
-        const auto& value = iter.value();
+        auto iter = json.cbegin();
+        while (iter != json.cend())
+        {
+            const auto& key = iter.key();
+            const auto& value = iter.value();
 
-        if (key == "x") out.x = value;
-        else if (key == "y") out.y = value;
-        else if (key == "z") out.z = value;
+            if (key == "x") out.x = value;
+            else if (key == "y") out.y = value;
+            else if (key == "z") out.z = value;
 
-        ++iter;
+            ++iter;
+        }
+        
     }
-    
+    catch (const std::exception& exc)
+    {
+        ofLogError("deserialize") << exc.what() << ": " << json.dump();
+    }
+
     return out;
 }
 
@@ -152,17 +183,24 @@ glm::vec3 deserialize(const ofJson& json)
 {
     glm::vec3 out;
 
-    auto iter = json.cbegin();
-    while (iter != json.cend())
+    try
     {
-        const auto& key = iter.key();
-        const auto& value = iter.value();
+        auto iter = json.cbegin();
+        while (iter != json.cend())
+        {
+            const auto& key = iter.key();
+            const auto& value = iter.value();
 
-        if (key == "x") out.x = value;
-        else if (key == "y") out.y = value;
-        else if (key == "z") out.z = value;
-
-        ++iter;
+            if (key == "x") out.x = value;
+            else if (key == "y") out.y = value;
+            else if (key == "z") out.z = value;
+            
+            ++iter;
+        }
+    }
+    catch (const std::exception& exc)
+    {
+        ofLogError("deserialize") << exc.what() << ": " << json.dump();
     }
 
     return out;
@@ -200,21 +238,29 @@ std::string toString(ofLogLevel level)
 template<>
 ofLogLevel deserialize(const ofJson& json)
 {
-    if (icompare(json, toString(OF_LOG_VERBOSE)) || icompare(json, "verbose"))
-        return OF_LOG_VERBOSE;
-    else if (icompare(json, toString(OF_LOG_NOTICE)) || icompare(json, "notice"))
-        return OF_LOG_NOTICE;
-    else if (icompare(json, toString(OF_LOG_WARNING)) || icompare(json, "warning"))
-        return OF_LOG_WARNING;
-    else if (icompare(json, toString(OF_LOG_ERROR)) || icompare(json, "error"))
-        return OF_LOG_ERROR;
-    else if (icompare(json, toString(OF_LOG_FATAL_ERROR)) || icompare(json, "fatal"))
-        return OF_LOG_FATAL_ERROR;
-    else if (icompare(json, toString(OF_LOG_SILENT)) || icompare(json, "silent"))
-        return OF_LOG_SILENT;
-    else
+    try
     {
-        ofLogWarning("deserialize") << "Unknown " << json.dump();
+        if (icompare(json, toString(OF_LOG_VERBOSE)) || icompare(json, "verbose"))
+            return OF_LOG_VERBOSE;
+        else if (icompare(json, toString(OF_LOG_NOTICE)) || icompare(json, "notice"))
+            return OF_LOG_NOTICE;
+        else if (icompare(json, toString(OF_LOG_WARNING)) || icompare(json, "warning"))
+            return OF_LOG_WARNING;
+        else if (icompare(json, toString(OF_LOG_ERROR)) || icompare(json, "error"))
+            return OF_LOG_ERROR;
+        else if (icompare(json, toString(OF_LOG_FATAL_ERROR)) || icompare(json, "fatal"))
+            return OF_LOG_FATAL_ERROR;
+        else if (icompare(json, toString(OF_LOG_SILENT)) || icompare(json, "silent"))
+            return OF_LOG_SILENT;
+        else
+        {
+            ofLogWarning("deserialize") << "Unknown " << json.dump();
+            return OF_LOG_NOTICE;
+        }
+    }
+    catch (const std::exception& exc)
+    {
+        ofLogError("deserialize") << exc.what() << ": " << json.dump();
         return OF_LOG_NOTICE;
     }
 }
@@ -240,12 +286,20 @@ std::string toString(ofWindowMode level)
 template<>
 ofWindowMode deserialize(const ofJson& json)
 {
-    if (json == toString(OF_WINDOW)) return OF_WINDOW;
-    else if (json == toString(OF_FULLSCREEN)) return OF_FULLSCREEN;
-    else if (json == toString(OF_GAME_MODE)) return OF_GAME_MODE;
-    else
+    try
     {
-        ofLogWarning("deserialize") << "Unknown " << json.dump();
+        if (json == toString(OF_WINDOW)) return OF_WINDOW;
+        else if (json == toString(OF_FULLSCREEN)) return OF_FULLSCREEN;
+        else if (json == toString(OF_GAME_MODE)) return OF_GAME_MODE;
+        else
+        {
+            ofLogWarning("deserialize") << "Unknown " << json.dump();
+            return OF_WINDOW;
+        }
+    }
+    catch (const std::exception& exc)
+    {
+        ofLogError("deserialize") << exc.what() << ": " << json.dump();
         return OF_WINDOW;
     }
 }
@@ -263,22 +317,30 @@ ofWindowSettings deserialize(const ofJson& json)
 {
     ofWindowSettings out;
 
-    auto iter = json.cbegin();
-    while (iter != json.cend())
+    try
     {
-        const auto& key = iter.key();
-        const auto& value = iter.value();
-
-        if (key == "position") out.setPosition(deserialize<ofVec2f>(value));
-        else if (key == "size")
+        auto iter = json.cbegin();
+        while (iter != json.cend())
         {
-            if (value.count("width")) out.width = value["width"];
-            if (value.count("height")) out.height = value["height"];
-        }
-        else if (key == "title") out.title = value;
-        else if (key == "window_mode") out.windowMode = deserialize<ofWindowMode>(value);
+            const auto& key = iter.key();
+            const auto& value = iter.value();
 
-        ++iter;
+            if (key == "position") out.setPosition(deserialize<ofVec2f>(value));
+            else if (key == "size")
+            {
+                if (value.count("width")) out.width = value["width"];
+                if (value.count("height")) out.height = value["height"];
+            }
+            else if (key == "title") out.title = value;
+            else if (key == "window_mode") out.windowMode = deserialize<ofWindowMode>(value);
+
+            ++iter;
+        }
+
+    }
+    catch (const std::exception& exc)
+    {
+        ofLogError("deserialize") << exc.what() << ": " << json.dump();
     }
 
     return out;
@@ -307,6 +369,37 @@ ofJson serialize(const ofWindowSettings& value)
 
     return json;
 }
+
+
+template<>
+ofJson serialize(const ofPolyline& value)
+{
+    ofJson json;
+    for (const auto& vertex: value) json.push_back(serialize(vertex));
+    return json;
+}
+
+
+template<>
+ofPolyline deserialize(const ofJson& json)
+{
+    ofPolyline out;
+
+    try
+    {
+        for (const auto& element: json)
+        {
+            out.addVertex(deserialize<glm::vec3>(element));
+        }
+    }
+    catch (const std::exception& exc)
+    {
+        ofLogError("deserialize") << exc.what() << ": " << json.dump();
+    }
+
+    return out;
+}
+
 
 
 } // namespace ofx

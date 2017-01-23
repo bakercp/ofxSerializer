@@ -28,4 +28,23 @@ void ofApp::setup()
         glm::vec2 vec(3, 4);
         std::cout << ofx::serialize(vec).dump(4) << std::endl;
     }
+
+
+    ofPolyline polyline;
+    polyline.addVertex(0, 1, 2);
+    polyline.addVertex(1, 2, 3);
+    polyline.addVertex(2, 3, 4);
+    polyline.addVertex(4, 5, 6);
+
+    ofJson polylineJson = ofx::serialize(polyline);
+
+    std::cout << polylineJson.dump(4) << std::endl;
+
+    ofPolyline p = ofx::deserialize<ofPolyline>(polylineJson);
+
+    for (const auto& vertex: p)
+    {
+        std::cout << vertex << std::endl;
+    }
+
 }
