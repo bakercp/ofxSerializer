@@ -15,26 +15,6 @@
 namespace ofx {
 
 
-bool icompare_pred(unsigned char a, unsigned char b)
-{
-    return std::tolower(a) == std::tolower(b);
-}
-
-
-bool icompare(const std::string& a, const std::string& b)
-{
-    if (a.length() == b.length())
-    {
-        return std::equal(b.begin(), b.end(),
-                          a.begin(), icompare_pred);
-    }
-    else
-    {
-        return false;
-    }
-}
-
-
 template<>
 ofRectangle deserialize(const ofJson& json)
 {
@@ -240,18 +220,12 @@ ofLogLevel deserialize(const ofJson& json)
 {
     try
     {
-        if (icompare(json, toString(OF_LOG_VERBOSE)) || icompare(json, "verbose"))
-            return OF_LOG_VERBOSE;
-        else if (icompare(json, toString(OF_LOG_NOTICE)) || icompare(json, "notice"))
-            return OF_LOG_NOTICE;
-        else if (icompare(json, toString(OF_LOG_WARNING)) || icompare(json, "warning"))
-            return OF_LOG_WARNING;
-        else if (icompare(json, toString(OF_LOG_ERROR)) || icompare(json, "error"))
-            return OF_LOG_ERROR;
-        else if (icompare(json, toString(OF_LOG_FATAL_ERROR)) || icompare(json, "fatal"))
-            return OF_LOG_FATAL_ERROR;
-        else if (icompare(json, toString(OF_LOG_SILENT)) || icompare(json, "silent"))
-            return OF_LOG_SILENT;
+        if (json == toString(OF_LOG_VERBOSE)) return OF_LOG_VERBOSE;
+        else if (json == toString(OF_LOG_NOTICE)) return OF_LOG_NOTICE;
+        else if (json == toString(OF_LOG_WARNING)) return OF_LOG_WARNING;
+        else if (json == toString(OF_LOG_ERROR)) return OF_LOG_ERROR;
+        else if (json == toString(OF_LOG_FATAL_ERROR)) return OF_LOG_FATAL_ERROR;
+        else if (json == toString(OF_LOG_SILENT)) return OF_LOG_SILENT;
         else
         {
             ofLogWarning("deserialize") << "Unknown " << json.dump();
