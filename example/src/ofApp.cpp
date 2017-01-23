@@ -19,5 +19,13 @@ void ofApp::setup()
     windowSettings.setPosition(ofVec2f(25, 25));
     std::cout << ofx::serialize(windowSettings).dump(4) << std::endl;
 
+    {
+        ofVec2f vec(1, 2);
+        std::cout << ofx::serialize(vec).dump(4) << std::endl;
+    }
 
+    {
+        glm::vec2 vec(3, 4);
+        std::cout << ofx::serialize(vec).dump(4) << std::endl;
+    }
 }
