@@ -212,6 +212,8 @@ std::string toString(ofLogLevel level)
         case OF_LOG_FATAL_ERROR: "OF_LOG_FATAL_ERROR";
         case OF_LOG_SILENT: return "OF_LOG_SILENT";
     }
+    
+    return "OF_LOG_VERBOSE";
 }
 
 
@@ -254,6 +256,8 @@ std::string toString(ofWindowMode level)
         case OF_FULLSCREEN: return "OF_FULLSCREEN";
         case OF_GAME_MODE: return "OF_GAME_MODE";
     }
+    
+    return "OF_WINDOW";
 }
 
     
