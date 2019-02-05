@@ -306,8 +306,8 @@ ofWindowSettings deserialize(const ofJson& json)
             if (key == "position") out.setPosition(deserialize<ofVec2f>(value));
             else if (key == "size")
             {
-                if (value.count("width")) out.width = value["width"];
-                if (value.count("height")) out.height = value["height"];
+//                if (value.count("width")) out.setWidth(value["width"]);
+//                if (value.count("height")) out.height = value["height"];
             }
             else if (key == "title") out.title = value;
             else if (key == "window_mode") out.windowMode = deserialize<ofWindowMode>(value);
@@ -335,8 +335,8 @@ ofJson serialize(const ofWindowSettings& value)
         json["position"] = serialize(value.getPosition());
     }
 
-    json["size"]["width"] = value.width;
-    json["size"]["height"] = value.height;
+//    json["size"]["width"] = value.width;
+//    json["size"]["height"] = value.height;
 
     if (!value.title.empty())
     {
