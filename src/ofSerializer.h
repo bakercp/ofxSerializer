@@ -5,7 +5,8 @@
 //
 
 
-#pragma once
+#ifndef OF_SERIALIZER_H
+#define OF_SERIALIZER_H
 
 
 #include "json.hpp"
@@ -159,6 +160,23 @@ inline void from_json(const nlohmann::json& j, ofPolyline& p)
 #include "ofLog.h"
 
 
+std::string to_string(const ofLogLevel& v)
+{
+    switch (level)
+    {
+        case OF_LOG_VERBOSE: return "OF_LOG_VERBOSE";
+        case OF_LOG_NOTICE:  return "OF_LOG_NOTICE";
+        case OF_LOG_WARNING: return "OF_LOG_WARNING";
+        case OF_LOG_ERROR:   return "OF_LOG_ERROR";
+        case OF_LOG_FATAL_ERROR: return "OF_LOG_FATAL_ERROR";
+        case OF_LOG_SILENT: return "OF_LOG_SILENT";
+    }
+    
+    return "OF_LOG_VERBOSE";
+}
+
+
+
 inline void to_json(nlohmann::json& j, const ofLogLevel& v)
 {
         switch (level)
@@ -191,3 +209,122 @@ inline void from_json(const nlohmann::json& j, ofLogLevel& v)
     return OF_LOG_VERBOSE;
 
 }
+
+
+// -----------------------------------------------------------------------------
+
+
+#include "ofWindowSettings.h"
+
+
+
+//template<>
+//ofJson serialize(const ofLogLevel& value)
+//{
+//    return toString(value);
+//}
+//
+//std::string toString(ofWindowMode level)
+//{
+//    switch (level)
+//    {
+//        case OF_WINDOW: return "OF_WINDOW";
+//        case OF_FULLSCREEN: return "OF_FULLSCREEN";
+//        case OF_GAME_MODE: return "OF_GAME_MODE";
+//    }
+//
+//    return "OF_WINDOW";
+//}
+//
+//
+//template<>
+//ofWindowMode deserialize(const ofJson& json)
+//{
+//    try
+//    {
+//        if (json == toString(OF_WINDOW)) return OF_WINDOW;
+//        else if (json == toString(OF_FULLSCREEN)) return OF_FULLSCREEN;
+//        else if (json == toString(OF_GAME_MODE)) return OF_GAME_MODE;
+//        else
+//        {
+//            ofLogWarning("deserialize") << "Unknown " << json.dump();
+//            return OF_WINDOW;
+//        }
+//    }
+//    catch (const std::exception& exc)
+//    {
+//        ofLogError("deserialize") << exc.what() << ": " << json.dump();
+//        return OF_WINDOW;
+//    }
+//}
+//
+//
+//template<>
+//ofJson serialize(const ofWindowMode& value)
+//{
+//    return toString(value);
+//}
+//
+//
+//template<>
+//ofWindowSettings deserialize(const ofJson& json)
+//{
+//    ofWindowSettings out;
+//
+//    try
+//    {
+//        auto iter = json.cbegin();
+//        while (iter != json.cend())
+//        {
+//            const auto& key = iter.key();
+//            const auto& value = iter.value();
+//
+//            if (key == "position") out.setPosition(deserialize<ofVec2f>(value));
+//            else if (key == "size")
+//            {
+////                if (value.count("width")) out.setWidth(value["width"]);
+////                if (value.count("height")) out.height = value["height"];
+//            }
+//            else if (key == "title") out.title = value;
+//            else if (key == "window_mode") out.windowMode = deserialize<ofWindowMode>(value);
+//
+//            ++iter;
+//        }
+//
+//    }
+//    catch (const std::exception& exc)
+//    {
+//        ofLogError("deserialize") << exc.what() << ": " << json.dump();
+//    }
+//
+//    return out;
+//}
+//
+//
+//template<>
+//ofJson serialize(const ofWindowSettings& value)
+//{
+//    ofJson json;
+//
+//    if (value.isPositionSet())
+//    {
+//        json["position"] = serialize(value.getPosition());
+//    }
+//
+////    json["size"]["width"] = value.width;
+////    json["size"]["height"] = value.height;
+//
+//    if (!value.title.empty())
+//    {
+//        json["title"] = value.title;
+//    }
+//
+//    json["window_mode"] = serialize(value.windowMode);
+//
+//    return json;
+//}
+//
+
+
+
+#endif // OF_SERIALIZER_H
