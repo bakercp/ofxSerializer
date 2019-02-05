@@ -152,3 +152,42 @@ inline void from_json(const nlohmann::json& j, ofPolyline& p)
 }
 
 
+
+// -----------------------------------------------------------------------------
+
+
+#include "ofLog.h"
+
+
+inline void to_json(nlohmann::json& j, const ofLogLevel& v)
+{
+        switch (level)
+        {
+            case OF_LOG_VERBOSE:     v = "OF_LOG_VERBOSE"; break;
+            case OF_LOG_NOTICE:      v = "OF_LOG_NOTICE";  break;
+            case OF_LOG_WARNING:     v = "OF_LOG_WARNING"; break;
+            case OF_LOG_ERROR:       v = "OF_LOG_ERROR";   break;
+            case OF_LOG_FATAL_ERROR: v = "OF_LOG_FATAL_ERROR"; break;
+            case OF_LOG_SILENT:      v = "OF_LOG_SILENT";  break;
+            default:                 v = "OF_LOG_VERBOSE"; break;
+        }
+}
+
+
+inline void from_json(const nlohmann::json& j, ofLogLevel& v)
+{
+    std::string s = j.get<std::string>();
+    if (!s.empty())
+    {
+        if      (s == "OF_LOG_VERBOSE")     return OF_LOG_VERBOSE;
+        else if (s == "OF_LOG_NOTICE")      return OF_LOG_NOTICE;
+        else if (s == "OF_LOG_WARNING")     return OF_LOG_WARNING;
+        else if (s == "OF_LOG_ERROR")       return OF_LOG_ERROR;
+        else if (s == "OF_LOG_FATAL_ERROR") return OF_LOG_FATAL_ERROR;
+        else if (s == "OF_LOG_SILENT")      return OF_LOG_SILENT;
+    }
+
+    ofLogWarning("from_json") << "Unknown value: " << s;
+    return OF_LOG_VERBOSE;
+
+}
