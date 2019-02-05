@@ -23,67 +23,85 @@
 namespace glm
 {
 
+
+template<typename T, precision P>
+inline void to_json(nlohmann::json& j, const glm::tvec2<T, P>& v)
+{
+    j = { { "x", v.x }, { "y", v.y } };
+}
     
-inline void to_json(nlohmann::json& j, const glm::vec2& p)
+
+template<typename T, precision P>
+inline void from_json(const nlohmann::json& j, glm::tvec2<T, P>& v)
 {
-    j = { { "x", p.x }, { "y", p.y } };
+    v.x = j.value("x", typename glm::tvec2<T, P>::value_type(0));
+    v.y = j.value("y", typename glm::tvec2<T, P>::value_type(0));
 }
 
-inline void from_json(const nlohmann::json& j, glm::vec2& p)
-{
-    p.x = j.value("x", glm::vec3::value_type(0.0f));
-    p.y = j.value("y", glm::vec3::value_type(0.0f));
-}
 
-inline void to_json(nlohmann::json& j, const glm::vec3& p)
+template<typename T, precision P>
+inline void to_json(nlohmann::json& j, const glm::tvec3<T, P>& v)
 {
-    j = { { "x", p.x }, { "y", p.y }, { "z", p.z } };
-}
-
-inline void from_json(const nlohmann::json& j, glm::vec3& p)
-{
-    p.x = j.value("x", glm::vec3::value_type(0.0f));
-    p.y = j.value("y", glm::vec3::value_type(0.0f));
-    p.z = j.value("z", glm::vec3::value_type(0.0f));
+    j = { { "x", v.x }, { "y", v.y }, { "z", v.z } };
 }
 
     
-inline void to_json(nlohmann::json& j, const glm::vec4& p)
+template<typename T, precision P>
+inline void from_json(const nlohmann::json& j, glm::tvec3<T, P>& v)
 {
-    j = { { "x", p.x }, { "y", p.y }, { "z", p.z }, { "w", p.w } };
+    v.x = j.value("x", typename glm::tvec3<T, P>::value_type(0));
+    v.y = j.value("y", typename glm::tvec3<T, P>::value_type(0));
+    v.z = j.value("z", typename glm::tvec3<T, P>::value_type(0));
 }
 
-inline void from_json(const nlohmann::json& j, glm::vec4& p)
+    
+template<typename T, precision P>
+inline void to_json(nlohmann::json& j, const glm::tvec4<T, P>& v)
 {
-    p.x = j.value("x", glm::vec4::value_type(0.0f));
-    p.y = j.value("y", glm::vec4::value_type(0.0f));
-    p.z = j.value("z", glm::vec4::value_type(0.0f));
-    p.w = j.value("w", glm::vec4::value_type(1.0f));
+    j = { { "x", v.x }, { "y", v.y }, { "z", v.z }, { "w", v.w } };
 }
 
-inline void to_json(nlohmann::json& j, const glm::mat3& p)
+    
+template<typename T, precision P>
+inline void from_json(const nlohmann::json& j, glm::tvec4<T, P>& v)
 {
-    j = { p[0], p[1], p[2] };
+    v.x = j.value("x", typename glm::tvec3<T, P>::value_type(0));
+    v.y = j.value("y", typename glm::tvec3<T, P>::value_type(0));
+    v.z = j.value("z", typename glm::tvec3<T, P>::value_type(0));
+    v.w = j.value("w", typename glm::tvec3<T, P>::value_type(1));
 }
 
-inline void from_json(const nlohmann::json& j, glm::mat3& p)
+    
+template<typename T, precision P>
+inline void to_json(nlohmann::json& j, const glm::tmat3x3<T, P>& v)
 {
-    p[0] = j[0];
-    p[1] = j[1];
-    p[2] = j[2];
+    j = { v[0], v[1], v[2] };
 }
 
-inline void to_json(nlohmann::json& j, const glm::mat4& p)
+
+template<typename T, precision P>
+inline void from_json(const nlohmann::json& j, glm::tmat3x3<T, P>& v)
 {
-    j = { p[0], p[1], p[2], p[3] };
+    v[0] = j[0];
+    v[1] = j[1];
+    v[2] = j[2];
 }
 
-inline void from_json(const nlohmann::json& j, glm::mat4& p)
+
+template<typename T, precision P>
+inline void to_json(nlohmann::json& j, const glm::tmat4x4<T, P>& v)
 {
-    p[0] = j[0];
-    p[1] = j[1];
-    p[2] = j[2];
-    p[3] = j[3];
+    j = { v[0], v[1], v[2], v[3] };
+}
+
+    
+template<typename T, precision P>
+inline void from_json(const nlohmann::json& j, glm::tmat4x4<T, P>& v)
+{
+    v[0] = j[0];
+    v[1] = j[1];
+    v[2] = j[2];
+    v[3] = j[3];
 }
 
 
@@ -96,17 +114,18 @@ inline void from_json(const nlohmann::json& j, glm::mat4& p)
 #include "ofRectangle.h"
 
 
-inline void to_json(nlohmann::json& j, const ofRectangle& p)
+inline void to_json(nlohmann::json& j, const ofRectangle& v)
 {
-    j = { { "x", p.x }, { "y", p.y }, { "width", p.width }, { "height", p.height } };
+    j = { { "x", v.x }, { "y", v.y }, { "width", v.width }, { "height", v.height } };
 }
 
-inline void from_json(const nlohmann::json& j, ofRectangle& p)
+
+inline void from_json(const nlohmann::json& j, ofRectangle& v)
 {
-    p.x = j.value("x", float(0.0f));
-    p.y = j.value("y", float(0.0f));
-    p.width = j.value("width", float(0.0f));
-    p.height = j.value("height", float(0.0f));
+    v.x = j.value("x", float(0.0f));
+    v.y = j.value("y", float(0.0f));
+    v.width = j.value("width", float(0.0f));
+    v.height = j.value("height", float(0.0f));
 }
 
 // -----------------------------------------------------------------------------
@@ -119,6 +138,7 @@ inline void to_json(nlohmann::json& j, const ofColor& p)
 {
     j = { { "r", p.r }, { "g", p.g }, { "b", p.b }, { "a", p.a } };
 }
+
 
 inline void from_json(const nlohmann::json& j, ofColor& p)
 {
@@ -135,21 +155,24 @@ inline void from_json(const nlohmann::json& j, ofColor& p)
 #include "ofPolyline.h"
 
 
-inline void to_json(nlohmann::json& j, const ofPolyline& p)
+template<typename VertexType>
+inline void to_json(nlohmann::json& j, const ofPolyline_<VertexType>& v)
 {
-    j["is_closed"] = p.isClosed();
+    j["is_closed"] = v.isClosed();
     nlohmann::json vertices = nlohmann::json::array();
-    for (auto& v: p)
-        vertices.push_back(v);
+    for (auto& vertex: v)
+        vertices.push_back(vertex);
     j["vertices"] = vertices;
 }
 
 
-inline void from_json(const nlohmann::json& j, ofPolyline& p)
+template<typename VertexType>
+inline void from_json(const nlohmann::json& j, ofPolyline_<VertexType>& v)
 {
-    for (auto& v: j["vertices"])
-        p.addVertex(v.get<glm::vec3>());
-    p.setClosed(j.value("is_closed", false));
+    const auto& vertices = j["vertices"];
+    for (auto& vertex: vertices)
+        v.addVertex(vertex.get<VertexType>());
+    v.setClosed(j.value("is_closed", false));
 }
 
 
@@ -160,16 +183,16 @@ inline void from_json(const nlohmann::json& j, ofPolyline& p)
 #include "ofLog.h"
 
 
-std::string to_string(const ofLogLevel& v)
+inline std::string to_string(const ofLogLevel& v)
 {
-    switch (level)
+    switch (v)
     {
-        case OF_LOG_VERBOSE: return "OF_LOG_VERBOSE";
-        case OF_LOG_NOTICE:  return "OF_LOG_NOTICE";
-        case OF_LOG_WARNING: return "OF_LOG_WARNING";
-        case OF_LOG_ERROR:   return "OF_LOG_ERROR";
-        case OF_LOG_FATAL_ERROR: return "OF_LOG_FATAL_ERROR";
-        case OF_LOG_SILENT: return "OF_LOG_SILENT";
+        case OF_LOG_VERBOSE:        return "OF_LOG_VERBOSE";
+        case OF_LOG_NOTICE:         return "OF_LOG_NOTICE";
+        case OF_LOG_WARNING:        return "OF_LOG_WARNING";
+        case OF_LOG_ERROR:          return "OF_LOG_ERROR";
+        case OF_LOG_FATAL_ERROR:    return "OF_LOG_FATAL_ERROR";
+        case OF_LOG_SILENT:         return "OF_LOG_SILENT";
     }
     
     return "OF_LOG_VERBOSE";
@@ -179,16 +202,7 @@ std::string to_string(const ofLogLevel& v)
 
 inline void to_json(nlohmann::json& j, const ofLogLevel& v)
 {
-        switch (level)
-        {
-            case OF_LOG_VERBOSE:     v = "OF_LOG_VERBOSE"; break;
-            case OF_LOG_NOTICE:      v = "OF_LOG_NOTICE";  break;
-            case OF_LOG_WARNING:     v = "OF_LOG_WARNING"; break;
-            case OF_LOG_ERROR:       v = "OF_LOG_ERROR";   break;
-            case OF_LOG_FATAL_ERROR: v = "OF_LOG_FATAL_ERROR"; break;
-            case OF_LOG_SILENT:      v = "OF_LOG_SILENT";  break;
-            default:                 v = "OF_LOG_VERBOSE"; break;
-        }
+    j = to_string(v);
 }
 
 
@@ -197,17 +211,41 @@ inline void from_json(const nlohmann::json& j, ofLogLevel& v)
     std::string s = j.get<std::string>();
     if (!s.empty())
     {
-        if      (s == "OF_LOG_VERBOSE")     return OF_LOG_VERBOSE;
-        else if (s == "OF_LOG_NOTICE")      return OF_LOG_NOTICE;
-        else if (s == "OF_LOG_WARNING")     return OF_LOG_WARNING;
-        else if (s == "OF_LOG_ERROR")       return OF_LOG_ERROR;
-        else if (s == "OF_LOG_FATAL_ERROR") return OF_LOG_FATAL_ERROR;
-        else if (s == "OF_LOG_SILENT")      return OF_LOG_SILENT;
+        if (s == to_string(OF_LOG_VERBOSE))
+        {
+            v = OF_LOG_VERBOSE;
+            return;
+        }
+        else if (s == to_string(OF_LOG_NOTICE))
+        {
+            v = OF_LOG_NOTICE;
+            return;
+        }
+        else if (s == to_string(OF_LOG_WARNING))
+        {
+            v = OF_LOG_WARNING;
+            return;
+        }
+        else if (s == to_string(OF_LOG_ERROR))
+        {
+            v = OF_LOG_ERROR;
+            return;
+        }
+        else if (s == to_string(OF_LOG_FATAL_ERROR))
+        {
+            v = OF_LOG_FATAL_ERROR;
+            return;
+        }
+        else if (s == to_string(OF_LOG_SILENT))
+        {
+            v = OF_LOG_SILENT;
+            return;
+        }
     }
 
     ofLogWarning("from_json") << "Unknown value: " << s;
-    return OF_LOG_VERBOSE;
-
+    v = OF_LOG_VERBOSE;
+    return;
 }
 
 
@@ -217,114 +255,84 @@ inline void from_json(const nlohmann::json& j, ofLogLevel& v)
 #include "ofWindowSettings.h"
 
 
+inline std::string to_string(const ofWindowMode& v)
+{
+    switch (v)
+    {
+        case OF_WINDOW:     return "OF_WINDOW";
+        case OF_FULLSCREEN: return "OF_FULLSCREEN";
+        case OF_GAME_MODE:  return "OF_GAME_MODE";
+    }
 
-//template<>
-//ofJson serialize(const ofLogLevel& value)
-//{
-//    return toString(value);
-//}
-//
-//std::string toString(ofWindowMode level)
-//{
-//    switch (level)
-//    {
-//        case OF_WINDOW: return "OF_WINDOW";
-//        case OF_FULLSCREEN: return "OF_FULLSCREEN";
-//        case OF_GAME_MODE: return "OF_GAME_MODE";
-//    }
-//
-//    return "OF_WINDOW";
-//}
-//
-//
-//template<>
-//ofWindowMode deserialize(const ofJson& json)
-//{
-//    try
-//    {
-//        if (json == toString(OF_WINDOW)) return OF_WINDOW;
-//        else if (json == toString(OF_FULLSCREEN)) return OF_FULLSCREEN;
-//        else if (json == toString(OF_GAME_MODE)) return OF_GAME_MODE;
-//        else
-//        {
-//            ofLogWarning("deserialize") << "Unknown " << json.dump();
-//            return OF_WINDOW;
-//        }
-//    }
-//    catch (const std::exception& exc)
-//    {
-//        ofLogError("deserialize") << exc.what() << ": " << json.dump();
-//        return OF_WINDOW;
-//    }
-//}
-//
-//
-//template<>
-//ofJson serialize(const ofWindowMode& value)
-//{
-//    return toString(value);
-//}
-//
-//
-//template<>
-//ofWindowSettings deserialize(const ofJson& json)
-//{
-//    ofWindowSettings out;
-//
-//    try
-//    {
-//        auto iter = json.cbegin();
-//        while (iter != json.cend())
-//        {
-//            const auto& key = iter.key();
-//            const auto& value = iter.value();
-//
-//            if (key == "position") out.setPosition(deserialize<ofVec2f>(value));
-//            else if (key == "size")
-//            {
-////                if (value.count("width")) out.setWidth(value["width"]);
-////                if (value.count("height")) out.height = value["height"];
-//            }
-//            else if (key == "title") out.title = value;
-//            else if (key == "window_mode") out.windowMode = deserialize<ofWindowMode>(value);
-//
-//            ++iter;
-//        }
-//
-//    }
-//    catch (const std::exception& exc)
-//    {
-//        ofLogError("deserialize") << exc.what() << ": " << json.dump();
-//    }
-//
-//    return out;
-//}
-//
-//
-//template<>
-//ofJson serialize(const ofWindowSettings& value)
-//{
-//    ofJson json;
-//
-//    if (value.isPositionSet())
-//    {
-//        json["position"] = serialize(value.getPosition());
-//    }
-//
-////    json["size"]["width"] = value.width;
-////    json["size"]["height"] = value.height;
-//
-//    if (!value.title.empty())
-//    {
-//        json["title"] = value.title;
-//    }
-//
-//    json["window_mode"] = serialize(value.windowMode);
-//
-//    return json;
-//}
-//
+    return "OF_WINDOW";
+}
 
+
+inline void to_json(nlohmann::json& j, const ofWindowMode& v)
+{
+    j = to_string(v);
+}
+
+
+inline void from_json(const nlohmann::json& j, ofWindowMode& v)
+{
+    std::string s = j.get<std::string>();
+    if (!s.empty())
+    {
+        if (s == to_string(OF_WINDOW))
+        {
+            v = OF_WINDOW;
+            return;
+        }
+        else if (s == to_string(OF_FULLSCREEN))
+        {
+            v = OF_FULLSCREEN;
+            return;
+        }
+        else if (s == to_string(OF_GAME_MODE))
+        {
+            v = OF_GAME_MODE;
+            return;
+        }
+    }
+
+    ofLogWarning("from_json") << "Unknown value: " << s;
+    v = OF_WINDOW;
+    return;
+}
+
+inline void to_json(nlohmann::json& j, const ofWindowSettings& v)
+{
+    if (v.isPositionSet())
+        j["position"] = v.getPosition();
+    if (v.isSizeSet())
+        j["size"] = glm::ivec2(v.getWidth(), v.getHeight());
+    if (!v.title.empty())
+        j["title"] = v.title;
+    
+    j["window_mode"] = v.windowMode;
+}
+
+
+inline void from_json(const nlohmann::json& j, ofWindowSettings& v)
+{
+    auto iter = j.cbegin();
+    while (iter != j.cend())
+    {
+        const auto& key = iter.key();
+        const auto& value = iter.value();
+
+        if (key == "position") v.setPosition(value);
+        else if (key == "size")
+        {
+            auto s = value.get<glm::ivec2>();
+            v.setSize(s.x, s.y);
+        }
+        else if (key == "title") v.title = value;
+        else if (key == "window_mode") v.windowMode = value;
+        ++iter;
+    }
+}
 
 
 #endif // OF_SERIALIZER_H
