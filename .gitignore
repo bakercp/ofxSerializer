@@ -32,13 +32,13 @@ example*/*
 ################################################################################
 
 # bin/data Folder
-tests*/bin/data/*
-!tests*/bin/data/data.txt
+tests/*/bin/data/*
+!tests/*/bin/data/data.txt
 
 # Project files
-tests*/*
-!tests*/src/
-!tests*/addons.make
+tests/*/*
+!tests/*/src/
+!tests/*/addons.make
 
 ################################################################################
 # Libraries
