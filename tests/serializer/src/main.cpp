@@ -15,7 +15,7 @@
 
 class ofApp: public ofxUnitTestsApp
 {
-	void run() override
+    void run() override
     {
         {
             ofRectangle r0(1, 2, 3, 4);
@@ -94,7 +94,7 @@ class ofApp: public ofxUnitTestsApp
             ofxTestEq(r0.title, r1.title, "ofWindowMode::title");
             ofxTestEq(r0.windowMode, r1.windowMode, "ofWindowMode::windowMode");
         }
-	}
+    }
 };
 
 
