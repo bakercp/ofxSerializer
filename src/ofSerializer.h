@@ -24,14 +24,14 @@ namespace glm
 {
 
 
-template<typename T, precision P>
+template<typename T, glm::precision P>
 inline void to_json(nlohmann::json& j, const glm::tvec2<T, P>& v)
 {
     j = { { "x", v.x }, { "y", v.y } };
 }
     
 
-template<typename T, precision P>
+template<typename T, glm::precision P>
 inline void from_json(const nlohmann::json& j, glm::tvec2<T, P>& v)
 {
     v.x = j.value("x", typename glm::tvec2<T, P>::value_type(0));
@@ -39,14 +39,14 @@ inline void from_json(const nlohmann::json& j, glm::tvec2<T, P>& v)
 }
 
 
-template<typename T, precision P>
+template<typename T, glm::precision P>
 inline void to_json(nlohmann::json& j, const glm::tvec3<T, P>& v)
 {
     j = { { "x", v.x }, { "y", v.y }, { "z", v.z } };
 }
 
     
-template<typename T, precision P>
+template<typename T, glm::precision P>
 inline void from_json(const nlohmann::json& j, glm::tvec3<T, P>& v)
 {
     v.x = j.value("x", typename glm::tvec3<T, P>::value_type(0));
@@ -55,14 +55,14 @@ inline void from_json(const nlohmann::json& j, glm::tvec3<T, P>& v)
 }
 
     
-template<typename T, precision P>
+template<typename T, glm::precision P>
 inline void to_json(nlohmann::json& j, const glm::tvec4<T, P>& v)
 {
     j = { { "x", v.x }, { "y", v.y }, { "z", v.z }, { "w", v.w } };
 }
 
     
-template<typename T, precision P>
+template<typename T, glm::precision P>
 inline void from_json(const nlohmann::json& j, glm::tvec4<T, P>& v)
 {
     v.x = j.value("x", typename glm::tvec3<T, P>::value_type(0));
@@ -72,14 +72,14 @@ inline void from_json(const nlohmann::json& j, glm::tvec4<T, P>& v)
 }
 
     
-template<typename T, precision P>
+template<typename T, glm::precision P>
 inline void to_json(nlohmann::json& j, const glm::tmat3x3<T, P>& v)
 {
     j = { v[0], v[1], v[2] };
 }
 
 
-template<typename T, precision P>
+template<typename T, glm::precision P>
 inline void from_json(const nlohmann::json& j, glm::tmat3x3<T, P>& v)
 {
     v[0] = j[0];
@@ -88,14 +88,14 @@ inline void from_json(const nlohmann::json& j, glm::tmat3x3<T, P>& v)
 }
 
 
-template<typename T, precision P>
+template<typename T, glm::precision P>
 inline void to_json(nlohmann::json& j, const glm::tmat4x4<T, P>& v)
 {
     j = { v[0], v[1], v[2], v[3] };
 }
 
     
-template<typename T, precision P>
+template<typename T, glm::precision P>
 inline void from_json(const nlohmann::json& j, glm::tmat4x4<T, P>& v)
 {
     v[0] = j[0];
@@ -105,7 +105,108 @@ inline void from_json(const nlohmann::json& j, glm::tmat4x4<T, P>& v)
 }
 
 
+template<typename T, glm::precision P>
+inline void to_json(nlohmann::json& j, const glm::tquat<T, P>& v)
+{
+    j = { { "x", v.x }, { "y", v.y }, { "z", v.z }, { "w", v.w } };
+}
+
+
+template<typename T, glm::precision P>
+inline void from_json(const nlohmann::json& j, glm::tquat<T, P>& v)
+{
+    v.x = j.value("x", typename glm::tquat<T, P>::value_type(1));
+    v.y = j.value("y", typename glm::tquat<T, P>::value_type(0));
+    v.z = j.value("z", typename glm::tquat<T, P>::value_type(0));
+    v.w = j.value("w", typename glm::tquat<T, P>::value_type(0));
+}
+
+
 }; // namespace glm
+
+
+inline void to_json(nlohmann::json& j, const ofVec2f& v)
+{
+    to_json(j, toGlm(v));
+}
+
+
+inline void from_json(const nlohmann::json& j, ofVec2f& v)
+{
+    glm::vec2 g;
+    from_json(j, g);
+    v = toOf(g);
+}
+
+
+inline void to_json(nlohmann::json& j, const ofVec3f& v)
+{
+    to_json(j, toGlm(v));
+}
+
+
+inline void from_json(const nlohmann::json& j, ofVec3f& v)
+{
+    glm::vec3 g;
+    from_json(j, g);
+    v = toOf(g);
+}
+
+
+inline void to_json(nlohmann::json& j, const ofVec4f& v)
+{
+    to_json(j, toGlm(v));
+}
+
+
+inline void from_json(const nlohmann::json& j, ofVec4f& v)
+{
+    glm::vec4 g;
+    from_json(j, g);
+    v = toOf(g);
+}
+
+
+inline void to_json(nlohmann::json& j, const ofMatrix3x3& v)
+{
+    to_json(j, toGlm(v));
+}
+
+
+inline void from_json(const nlohmann::json& j, ofMatrix3x3& v)
+{
+    glm::mat3 g;
+    from_json(j, g);
+    v = toOf(g);
+}
+
+
+inline void to_json(nlohmann::json& j, const ofMatrix4x4& v)
+{
+    to_json(j, toGlm(v));
+}
+
+
+inline void from_json(const nlohmann::json& j, ofMatrix4x4& v)
+{
+    glm::mat4 g;
+    from_json(j, g);
+    v = toOf(g);
+}
+
+
+inline void to_json(nlohmann::json& j, const ofQuaternion& v)
+{
+    to_json(j, toGlm(v));
+}
+
+
+inline void from_json(const nlohmann::json& j, ofQuaternion& v)
+{
+    glm::quat g;
+    from_json(j, g);
+    v = ofQuaternion(g);
+}
 
 
 // -----------------------------------------------------------------------------
