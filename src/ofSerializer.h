@@ -30,7 +30,7 @@ inline void to_json(nlohmann::json& j, const glm::tvec2<T, P>& v)
 {
     j = { { "x", v.x }, { "y", v.y } };
 }
-    
+
 
 template<typename T, glm::precision P>
 inline void from_json(const nlohmann::json& j, glm::tvec2<T, P>& v)
@@ -46,7 +46,7 @@ inline void to_json(nlohmann::json& j, const glm::tvec3<T, P>& v)
     j = { { "x", v.x }, { "y", v.y }, { "z", v.z } };
 }
 
-    
+
 template<typename T, glm::precision P>
 inline void from_json(const nlohmann::json& j, glm::tvec3<T, P>& v)
 {
@@ -55,14 +55,14 @@ inline void from_json(const nlohmann::json& j, glm::tvec3<T, P>& v)
     v.z = j.value("z", typename glm::tvec3<T, P>::value_type(0));
 }
 
-    
+
 template<typename T, glm::precision P>
 inline void to_json(nlohmann::json& j, const glm::tvec4<T, P>& v)
 {
     j = { { "x", v.x }, { "y", v.y }, { "z", v.z }, { "w", v.w } };
 }
 
-    
+
 template<typename T, glm::precision P>
 inline void from_json(const nlohmann::json& j, glm::tvec4<T, P>& v)
 {
@@ -72,7 +72,7 @@ inline void from_json(const nlohmann::json& j, glm::tvec4<T, P>& v)
     v.w = j.value("w", typename glm::tvec3<T, P>::value_type(1));
 }
 
-    
+
 template<typename T, glm::precision P>
 inline void to_json(nlohmann::json& j, const glm::tmat3x3<T, P>& v)
 {
@@ -95,7 +95,7 @@ inline void to_json(nlohmann::json& j, const glm::tmat4x4<T, P>& v)
     j = { v[0], v[1], v[2], v[3] };
 }
 
-    
+
 template<typename T, glm::precision P>
 inline void from_json(const nlohmann::json& j, glm::tmat4x4<T, P>& v)
 {
@@ -208,7 +208,6 @@ inline void from_json(const nlohmann::json& j, ofQuaternion& v)
     from_json(j, g);
     v = ofQuaternion(g);
 }
-
 
 // -----------------------------------------------------------------------------
 
@@ -615,7 +614,7 @@ inline std::string to_string(const ofLogLevel& v)
         case OF_LOG_FATAL_ERROR:    return "OF_LOG_FATAL_ERROR";
         case OF_LOG_SILENT:         return "OF_LOG_SILENT";
     }
-    
+
     return "OF_LOG_VERBOSE";
 }
 
@@ -727,10 +726,11 @@ inline void to_json(nlohmann::json& j, const ofWindowSettings& v)
     if (v.isPositionSet())
         j["position"] = v.getPosition();
     if (v.isSizeSet())
-        j["size"] = glm::ivec2(v.getWidth(), v.getHeight());
+        j["size"] = { { "width", v.getWidth() }, { "height", v.getHeight() } };;
+
     if (!v.title.empty())
         j["title"] = v.title;
-    
+
     j["window_mode"] = v.windowMode;
 }
 
@@ -745,10 +745,8 @@ inline void from_json(const nlohmann::json& j, ofWindowSettings& v)
 
         if (key == "position") v.setPosition(value);
         else if (key == "size")
-        {
-            auto s = value.get<glm::ivec2>();
-            v.setSize(s.x, s.y);
-        }
+            v.setSize(value.value("width", 100),
+                      value.value("height", 100));
         else if (key == "title") v.title = value;
         else if (key == "window_mode") v.windowMode = value;
         ++iter;
