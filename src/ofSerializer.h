@@ -351,6 +351,21 @@ inline void to_json(nlohmann::json& j, const ofRectangle& v)
 
 inline void from_json(const nlohmann::json& j, ofRectangle& v)
 {
+    /*
+    auto positionIter = j.find("position");
+    auto sizeIter = j.find("size");
+
+    // Accept an alternate form alternate.
+    if (positionIter != j.end() && sizeIter != j.end())
+    {
+        v.x = positionIter->value("x", float(0.0f));
+        v.y = positionIter->value("y", float(0.0f));
+        v.width = sizeIter->value("width", float (0.0f));
+        v.height= sizeIter->value("height", float (0.0f));
+        return;
+    }
+    */
+
     v.x = j.value("x", float(0.0f));
     v.y = j.value("y", float(0.0f));
     v.width = j.value("width", float(0.0f));
