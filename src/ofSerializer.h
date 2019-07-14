@@ -10,10 +10,32 @@
 
 
 #include "json.hpp"
-#include "ofVectorMath.h"
+
 
 // -----------------------------------------------------------------------------
 
+
+#include "ofConstants.h"
+
+
+NLOHMANN_JSON_SERIALIZE_ENUM( ofTargetPlatform, {
+    { OF_TARGET_OSX, "OF_TARGET_OSX" },
+    { OF_TARGET_MINGW, "OF_TARGET_MINGW"},
+    { OF_TARGET_WINVS, "OF_TARGET_WINVS"},
+    { OF_TARGET_IOS, "OF_TARGET_IOS" },
+    { OF_TARGET_ANDROID, "OF_TARGET_ANDROID"},
+    { OF_TARGET_LINUX, "OF_TARGET_LINUX"},
+    { OF_TARGET_LINUX64, "OF_TARGET_LINUX64" },
+    { OF_TARGET_LINUXARMV6L, "OF_TARGET_LINUXARMV6L"},
+    { OF_TARGET_LINUXARMV7L, "OF_TARGET_LINUXARMV7L"},
+    { OF_TARGET_EMSCRIPTEN, "OF_TARGET_EMSCRIPTEN" }
+})
+
+
+// -----------------------------------------------------------------------------
+
+
+#include "ofVectorMath.h"
 #include "glm/vec2.hpp"
 #include "glm/vec3.hpp"
 #include "glm/vec4.hpp"
@@ -215,132 +237,35 @@ inline void from_json(const nlohmann::json& j, ofQuaternion& v)
 #include "ofRectangle.h"
 
 
-#define ENUM_TO_STRING(x) #x
-#define ENUM_TO_STRING_CASE(x) { case x: return #x; }
-
-#define STRING_TO_ENUM_RETURN(s, x) if { s x: return #x; }
-
-
-//if (s == to_string(OF_ASPECT_RATIO_IGNORE))
-//{
-//    v = OF_ASPECT_RATIO_IGNORE;
-//    return;
-//}
+NLOHMANN_JSON_SERIALIZE_ENUM( ofAspectRatioMode, {
+    { OF_ASPECT_RATIO_IGNORE, "OF_ASPECT_RATIO_IGNORE" },
+    { OF_ASPECT_RATIO_KEEP, "OF_ASPECT_RATIO_KEEP"},
+    { OF_ASPECT_RATIO_KEEP_BY_EXPANDING, "OF_ASPECT_RATIO_KEEP_BY_EXPANDING"}
+})
 
 
-
-//enum ofAspectRatioMode {
-//    /// \brief Set the rectangle's width and height to match the target.
-//    OF_ASPECT_RATIO_IGNORE            = 0,
-//    /// \brief Resizes the rectangle to completely fit within the target.
-//    OF_ASPECT_RATIO_KEEP              = 1,
-//    /// \brief Resizes the rectangle to completely enclose the target.
-//    OF_ASPECT_RATIO_KEEP_BY_EXPANDING = 2,
-//};
+NLOHMANN_JSON_SERIALIZE_ENUM( ofAlignVert, {
+    { OF_ALIGN_VERT_IGNORE, "OF_ALIGN_VERT_IGNORE" },
+    { OF_ALIGN_VERT_TOP, "OF_ALIGN_VERT_TOP"},
+    { OF_ALIGN_VERT_BOTTOM, "OF_ALIGN_VERT_BOTTOM"},
+    { OF_ALIGN_VERT_CENTER, "OF_ALIGN_VERT_CENTER"}
+})
 
 
+NLOHMANN_JSON_SERIALIZE_ENUM( ofAlignHorz, {
+    { OF_ALIGN_HORZ_IGNORE, "OF_ALIGN_HORZ_IGNORE" },
+    { OF_ALIGN_HORZ_LEFT, "OF_ALIGN_HORZ_LEFT"},
+    { OF_ALIGN_HORZ_RIGHT, "OF_ALIGN_HORZ_RIGHT"},
+    { OF_ALIGN_HORZ_CENTER, "OF_ALIGN_HORZ_CENTER"}
+})
 
 
-
-//inline std::string to_string(const ofAspectRatioMode& v)
-//{
-//    switch (v)
-//    {
-//        MAKE_STRING_CASE(OF_ASPECT_RATIO_IGNORE)
-//        MAKE_STRING_CASE(OF_ASPECT_RATIO_KEEP)
-//        MAKE_STRING_CASE(OF_ASPECT_RATIO_KEEP_BY_EXPANDING)
-////        case OF_ASPECT_RATIO_IGNORE: return "OF_ASPECT_RATIO_IGNORE";
-////        case OF_ASPECT_RATIO_KEEP: return "OF_ASPECT_RATIO_KEEP";
-////        case OF_ASPECT_RATIO_KEEP_BY_EXPANDING: return "OF_ASPECT_RATIO_KEEP_BY_EXPANDING";
-//    }
-//
-//    return "OF_ASPECT_RATIO_IGNORE";
-//}
-//
-//
-//
-//inline void to_json(nlohmann::json& j, const ofAspectRatioMode& v)
-//{
-//    j = to_string(v);
-//}
-//
-//inline void from_json(const nlohmann::json& j, ofAspectRatioMode& v)
-//{
-//    std::string s = j.get<std::string>();
-//    if (!s.empty())
-//    {
-//        if (s == to_string(OF_ASPECT_RATIO_IGNORE)) v = OF_ASPECT_RATIO_IGNORE; return; }
-//        else if (s == to_string(OF_ASPECT_RATIO_KEEP)) { v = OF_ASPECT_RATIO_KEEP; return; }
-//        else if (s == to_string(OF_ASPECT_RATIO_KEEP_BY_EXPANDING)) { v = OF_ASPECT_RATIO_KEEP_BY_EXPANDING; return; }
-//    }
-//
-//    ofLogWarning("from_json") << "Unknown value: " << s;
-//    v = OF_ASPECT_RATIO_IGNORE;
-//    return;
-//}
-//
-
-
-
-
-
-//
-///// \brief Used to represent the available vertical rectangle alignment modes.
-/////
-///// \sa ofRectangle
-//enum ofAlignVert {
-//    /// \brief Do not perform any vertical alignment.
-//    OF_ALIGN_VERT_IGNORE   = 0x0000,
-//    /// \brief Use the upper edge of the rectangle to vertically anchor the alignment.
-//    OF_ALIGN_VERT_TOP      = 0x0010,
-//    /// \brief Use the bottom edge of the rectangle to vertically anchor the alignment.
-//    OF_ALIGN_VERT_BOTTOM   = 0x0020,
-//    /// \brief Use the center of the rectangle to vertically anchor the alignment.
-//    OF_ALIGN_VERT_CENTER   = 0x0040,
-//};
-//
-//
-///// \brief Used to represent the available horizontal rectangle alignment modes.
-/////
-///// \sa ofRectangle
-//enum ofAlignHorz {
-//    /// \brief Do not perform any horizontal alignment.
-//    OF_ALIGN_HORZ_IGNORE   = 0x0000,
-//    /// \brief Use the left edge of the rectangle to horizontally anchor the alignment.
-//    OF_ALIGN_HORZ_LEFT     = 0x0001,
-//    /// \brief Use the right edge of the rectangle to horizontally anchor the alignment.
-//    OF_ALIGN_HORZ_RIGHT    = 0x0002,
-//    /// \brief Use the center of the rectangle to horizontally anchor the alignment.
-//    OF_ALIGN_HORZ_CENTER   = 0x0004,
-//};
-//
-//
-//
-//
-//
-//
-//inline std::string to_string(const ofAspectRatioMode& v)
-//{
-//    switch (v)
-//    {
-//        case OF_LOG_VERBOSE:        return "OF_LOG_VERBOSE";
-//        case OF_LOG_NOTICE:         return "OF_LOG_NOTICE";
-//        case OF_LOG_WARNING:        return "OF_LOG_WARNING";
-//        case OF_LOG_ERROR:          return "OF_LOG_ERROR";
-//        case OF_LOG_FATAL_ERROR:    return "OF_LOG_FATAL_ERROR";
-//        case OF_LOG_SILENT:         return "OF_LOG_SILENT";
-//    }
-//
-//    return "OF_LOG_VERBOSE";
-//}
-
-
-
-
-
-
-
-
+NLOHMANN_JSON_SERIALIZE_ENUM( ofScaleMode, {
+    { OF_SCALEMODE_FIT, "OF_SCALEMODE_FIT" },
+    { OF_SCALEMODE_FILL, "OF_SCALEMODE_FILL"},
+    { OF_SCALEMODE_CENTER, "OF_SCALEMODE_CENTER"},
+    { OF_SCALEMODE_STRETCH_TO_FILL, "OF_SCALEMODE_STRETCH_TO_FILL"}
+})
 
 
 inline void to_json(nlohmann::json& j, const ofRectangle& v)
@@ -351,21 +276,6 @@ inline void to_json(nlohmann::json& j, const ofRectangle& v)
 
 inline void from_json(const nlohmann::json& j, ofRectangle& v)
 {
-    /*
-    auto positionIter = j.find("position");
-    auto sizeIter = j.find("size");
-
-    // Accept an alternate form alternate.
-    if (positionIter != j.end() && sizeIter != j.end())
-    {
-        v.x = positionIter->value("x", float(0.0f));
-        v.y = positionIter->value("y", float(0.0f));
-        v.width = sizeIter->value("width", float (0.0f));
-        v.height= sizeIter->value("height", float (0.0f));
-        return;
-    }
-    */
-
     v.x = j.value("x", float(0.0f));
     v.y = j.value("y", float(0.0f));
     v.width = j.value("width", float(0.0f));
@@ -401,111 +311,37 @@ inline void from_json(const nlohmann::json& j, ofColor_<PixelType>& p)
 #include "ofMesh.h"
 
 
-
-inline std::string to_string(const ofPrimitiveMode& v)
-{
-    switch (v)
-    {
-        case OF_PRIMITIVE_TRIANGLES: return "OF_PRIMITIVE_TRIANGLES";
-        case OF_PRIMITIVE_TRIANGLE_STRIP: return "OF_PRIMITIVE_TRIANGLE_STRIP";
-        case OF_PRIMITIVE_TRIANGLE_FAN: return "OF_PRIMITIVE_TRIANGLE_FAN";
-        case OF_PRIMITIVE_LINES: return "OF_PRIMITIVE_LINES";
-        case OF_PRIMITIVE_LINE_STRIP: return "OF_PRIMITIVE_LINE_STRIP";
-        case OF_PRIMITIVE_LINE_LOOP: return "OF_PRIMITIVE_LINE_LOOP";
-        case OF_PRIMITIVE_POINTS: return "OF_PRIMITIVE_POINTS";
 #ifndef TARGET_OPENGLES
-        case OF_PRIMITIVE_LINES_ADJACENCY: return "OF_PRIMITIVE_LINES_ADJACENCY";
-        case OF_PRIMITIVE_LINE_STRIP_ADJACENCY: return "OF_PRIMITIVE_LINE_STRIP_ADJACENCY";
-        case OF_PRIMITIVE_TRIANGLES_ADJACENCY: return "OF_PRIMITIVE_TRIANGLES_ADJACENCY";
-        case OF_PRIMITIVE_TRIANGLE_STRIP_ADJACENCY: return "OF_PRIMITIVE_TRIANGLE_STRIP_ADJACENCY";
-        case OF_PRIMITIVE_PATCHES: return "OF_PRIMITIVE_PATCHES";
+
+NLOHMANN_JSON_SERIALIZE_ENUM( ofPrimitiveMode, {
+    { OF_PRIMITIVE_TRIANGLES, "OF_PRIMITIVE_TRIANGLES" },
+    { OF_PRIMITIVE_TRIANGLE_STRIP, "OF_PRIMITIVE_TRIANGLE_STRIP"},
+    { OF_PRIMITIVE_TRIANGLE_FAN, "OF_PRIMITIVE_TRIANGLE_FAN"},
+    { OF_PRIMITIVE_LINES, "OF_PRIMITIVE_LINES" },
+    { OF_PRIMITIVE_LINE_STRIP, "OF_PRIMITIVE_LINE_STRIP"},
+    { OF_PRIMITIVE_LINE_LOOP, "OF_PRIMITIVE_LINE_LOOP"},
+    { OF_PRIMITIVE_POINTS, "OF_PRIMITIVE_POINTS"},
+
+    { OF_PRIMITIVE_LINES_ADJACENCY, "OF_PRIMITIVE_LINES_ADJACENCY"},
+    { OF_PRIMITIVE_LINE_STRIP_ADJACENCY, "OF_PRIMITIVE_LINE_STRIP_ADJACENCY"},
+    { OF_PRIMITIVE_TRIANGLES_ADJACENCY, "OF_PRIMITIVE_TRIANGLES_ADJACENCY"},
+    { OF_PRIMITIVE_TRIANGLE_STRIP_ADJACENCY, "OF_PRIMITIVE_TRIANGLE_STRIP_ADJACENCY"},
+    { OF_PRIMITIVE_PATCHES, "OF_PRIMITIVE_PATCHES"}
+})
+
+#else
+
+NLOHMANN_JSON_SERIALIZE_ENUM( ofPrimitiveMode, {
+    { OF_PRIMITIVE_TRIANGLES, "OF_PRIMITIVE_TRIANGLES" },
+    { OF_PRIMITIVE_TRIANGLE_STRIP, "OF_PRIMITIVE_TRIANGLE_STRIP"},
+    { OF_PRIMITIVE_TRIANGLE_FAN, "OF_PRIMITIVE_TRIANGLE_FAN"},
+    { OF_PRIMITIVE_LINES, "OF_PRIMITIVE_LINES" },
+    { OF_PRIMITIVE_LINE_STRIP, "OF_PRIMITIVE_LINE_STRIP"},
+    { OF_PRIMITIVE_LINE_LOOP, "OF_PRIMITIVE_LINE_LOOP"},
+    { OF_PRIMITIVE_POINTS, "OF_PRIMITIVE_POINTS"},
+})
+
 #endif
-    }
-
-    return "OF_PRIMITIVE_TRIANGLES";
-}
-
-
-
-inline void to_json(nlohmann::json& j, const ofPrimitiveMode& v)
-{
-    j = to_string(v);
-}
-
-
-inline void from_json(const nlohmann::json& j, ofPrimitiveMode& v)
-{
-    std::string s = j.get<std::string>();
-    if (!s.empty())
-    {
-        if (s == to_string(OF_PRIMITIVE_TRIANGLES))
-        {
-            v = OF_PRIMITIVE_TRIANGLES;
-            return;
-        }
-        else if (s == to_string(OF_PRIMITIVE_TRIANGLE_STRIP))
-        {
-            v = OF_PRIMITIVE_TRIANGLE_STRIP;
-            return;
-        }
-        else if (s == to_string(OF_PRIMITIVE_TRIANGLE_FAN))
-        {
-            v = OF_PRIMITIVE_TRIANGLE_FAN;
-            return;
-        }
-        else if (s == to_string(OF_PRIMITIVE_LINES))
-        {
-            v = OF_PRIMITIVE_LINES;
-            return;
-        }
-        else if (s == to_string(OF_PRIMITIVE_LINE_STRIP))
-        {
-            v = OF_PRIMITIVE_LINE_STRIP;
-            return;
-        }
-        else if (s == to_string(OF_PRIMITIVE_LINE_LOOP))
-        {
-            v = OF_PRIMITIVE_LINE_LOOP;
-            return;
-        }
-        else if (s == to_string(OF_PRIMITIVE_POINTS))
-        {
-            v = OF_PRIMITIVE_POINTS;
-            return;
-        }
-#ifndef TARGET_OPENGLES
-        else if (s == to_string(OF_PRIMITIVE_LINES_ADJACENCY))
-        {
-            v = OF_PRIMITIVE_LINES_ADJACENCY;
-            return;
-        }
-        else if (s == to_string(OF_PRIMITIVE_LINE_STRIP_ADJACENCY))
-        {
-            v = OF_PRIMITIVE_LINE_STRIP_ADJACENCY;
-            return;
-        }
-        else if (s == to_string(OF_PRIMITIVE_TRIANGLES_ADJACENCY))
-        {
-            v = OF_PRIMITIVE_TRIANGLES_ADJACENCY;
-            return;
-        }
-        else if (s == to_string(OF_PRIMITIVE_TRIANGLE_STRIP_ADJACENCY))
-        {
-            v = OF_PRIMITIVE_TRIANGLE_STRIP_ADJACENCY;
-            return;
-        }
-        else if (s == to_string(OF_PRIMITIVE_PATCHES))
-        {
-            v = OF_PRIMITIVE_PATCHES;
-            return;
-        }
-#endif
-    }
-
-    ofLogWarning("from_json") << "Unknown value: " << s;
-    v = OF_PRIMITIVE_TRIANGLES;
-    return;
-}
 
 
 //std::vector<V> vertices;
@@ -563,6 +399,7 @@ inline void from_json(const nlohmann::json& j, ofMesh_<V, N, C, T>& v)
 
     v.setMode(j.value("primitive_mode", OF_PRIMITIVE_TRIANGLES));
 
+    // TODO
     bool usingColors = j.value("using_colors", true);
     bool usingTextures = j.value("using_textures", true);
     bool usingNormals = j.value("using_normals", true);
@@ -618,70 +455,14 @@ inline void from_json(const nlohmann::json& j, ofPolyline_<VertexType>& v)
 #include "ofLog.h"
 
 
-inline std::string to_string(const ofLogLevel& v)
-{
-    switch (v)
-    {
-        case OF_LOG_VERBOSE:        return "OF_LOG_VERBOSE";
-        case OF_LOG_NOTICE:         return "OF_LOG_NOTICE";
-        case OF_LOG_WARNING:        return "OF_LOG_WARNING";
-        case OF_LOG_ERROR:          return "OF_LOG_ERROR";
-        case OF_LOG_FATAL_ERROR:    return "OF_LOG_FATAL_ERROR";
-        case OF_LOG_SILENT:         return "OF_LOG_SILENT";
-    }
-
-    return "OF_LOG_VERBOSE";
-}
-
-
-
-inline void to_json(nlohmann::json& j, const ofLogLevel& v)
-{
-    j = to_string(v);
-}
-
-
-inline void from_json(const nlohmann::json& j, ofLogLevel& v)
-{
-    std::string s = j.get<std::string>();
-    if (!s.empty())
-    {
-        if (s == to_string(OF_LOG_VERBOSE))
-        {
-            v = OF_LOG_VERBOSE;
-            return;
-        }
-        else if (s == to_string(OF_LOG_NOTICE))
-        {
-            v = OF_LOG_NOTICE;
-            return;
-        }
-        else if (s == to_string(OF_LOG_WARNING))
-        {
-            v = OF_LOG_WARNING;
-            return;
-        }
-        else if (s == to_string(OF_LOG_ERROR))
-        {
-            v = OF_LOG_ERROR;
-            return;
-        }
-        else if (s == to_string(OF_LOG_FATAL_ERROR))
-        {
-            v = OF_LOG_FATAL_ERROR;
-            return;
-        }
-        else if (s == to_string(OF_LOG_SILENT))
-        {
-            v = OF_LOG_SILENT;
-            return;
-        }
-    }
-
-    ofLogWarning("from_json") << "Unknown value: " << s;
-    v = OF_LOG_VERBOSE;
-    return;
-}
+NLOHMANN_JSON_SERIALIZE_ENUM( ofLogLevel, {
+    { OF_LOG_VERBOSE, "OF_LOG_VERBOSE" },
+    { OF_LOG_NOTICE, "OF_LOG_NOTICE"},
+    { OF_LOG_WARNING, "OF_LOG_WARNING"},
+    { OF_LOG_ERROR, "OF_LOG_ERROR" },
+    { OF_LOG_FATAL_ERROR, "OF_LOG_FATAL_ERROR"},
+    { OF_LOG_SILENT, "OF_LOG_SILENT"}
+})
 
 
 // -----------------------------------------------------------------------------
@@ -690,51 +471,12 @@ inline void from_json(const nlohmann::json& j, ofLogLevel& v)
 #include "ofWindowSettings.h"
 
 
-inline std::string to_string(const ofWindowMode& v)
-{
-    switch (v)
-    {
-        case OF_WINDOW:     return "OF_WINDOW";
-        case OF_FULLSCREEN: return "OF_FULLSCREEN";
-        case OF_GAME_MODE:  return "OF_GAME_MODE";
-    }
+NLOHMANN_JSON_SERIALIZE_ENUM( ofWindowMode, {
+    { OF_WINDOW, "OF_WINDOW" },
+    { OF_FULLSCREEN, "OF_FULLSCREEN"},
+    { OF_GAME_MODE, "OF_GAME_MODE"}
+})
 
-    return "OF_WINDOW";
-}
-
-
-inline void to_json(nlohmann::json& j, const ofWindowMode& v)
-{
-    j = to_string(v);
-}
-
-
-inline void from_json(const nlohmann::json& j, ofWindowMode& v)
-{
-    std::string s = j.get<std::string>();
-    if (!s.empty())
-    {
-        if (s == to_string(OF_WINDOW))
-        {
-            v = OF_WINDOW;
-            return;
-        }
-        else if (s == to_string(OF_FULLSCREEN))
-        {
-            v = OF_FULLSCREEN;
-            return;
-        }
-        else if (s == to_string(OF_GAME_MODE))
-        {
-            v = OF_GAME_MODE;
-            return;
-        }
-    }
-
-    ofLogWarning("from_json") << "Unknown value: " << s;
-    v = OF_WINDOW;
-    return;
-}
 
 inline void to_json(nlohmann::json& j, const ofWindowSettings& v)
 {
@@ -767,6 +509,162 @@ inline void from_json(const nlohmann::json& j, ofWindowSettings& v)
         ++iter;
     }
 }
+
+
+// -----------------------------------------------------------------------------
+
+
+#include "ofVideoBaseTypes.h"
+
+
+NLOHMANN_JSON_SERIALIZE_ENUM( ofLoopType, {
+    { OF_LOOP_NONE, "OF_LOOP_NONE" },
+    { OF_LOOP_PALINDROME, "OF_LOOP_PALINDROME"},
+    { OF_LOOP_NORMAL, "OF_LOOP_NORMAL"}
+})
+
+
+///// \brief A structure describing attributes of a video format.
+/////
+///// An ofVideoFormat is used to describe the size, pixel format and frame rates
+///// offered by a video device.
+/////
+///// \sa ofVideoDevice
+//class ofVideoFormat{
+//public:
+//	/// \brief The pixel format of the video format.
+//	ofPixelFormat pixelFormat;
+
+//	/// \brief The width of the video format in pixels.
+//	int width;
+
+//	/// \brief The height of the video format in pixels.
+//	int height;
+
+//	/// \brief A list of framerates for this video format in frames per second.
+//	std::vector<float> framerates;
+//};
+
+///// \brief A structure describing attributes of a video device.
+/////
+///// An ofVideoDevice can represent a camera, grabber or other frame source.
+//class ofVideoDevice{
+//public:
+//	/// \brief The video device ID.
+//	int id;
+
+//	/// \brief The video device name.
+//	std::string deviceName;
+
+//	/// \brief The video device hardware name.
+//	std::string hardwareName;
+
+//	/// \brief Unique identifier for the device if it has one.
+//	std::string serialID;
+
+//	/// \brief A list of video device formats provided by the device.
+//	/// \sa ofVideoFormat
+//	std::vector<ofVideoFormat> formats;
+
+//	/// \brief Is true if this video device is available.
+//	bool bAvailable;
+//};
+
+
+// -----------------------------------------------------------------------------
+
+
+#include "ofSoundBaseTypes.h"
+
+
+NLOHMANN_JSON_SERIALIZE_ENUM( ofSoundDevice::Api, {
+    { ofSoundDevice::Api::UNSPECIFIED, "UNSPECIFIED" },
+    { ofSoundDevice::Api::DEFAULT, "DEFAULT" },
+    { ofSoundDevice::Api::ALSA, "ALSA" },
+    { ofSoundDevice::Api::PULSE, "PULSE" },
+    { ofSoundDevice::Api::OSS, "OSS" },
+    { ofSoundDevice::Api::JACK, "JACK" },
+    { ofSoundDevice::Api::OSX_CORE, "OSX_CORE" },
+    { ofSoundDevice::Api::MS_WASAPI, "MS_WASAPI" },
+    { ofSoundDevice::Api::MS_ASIO, "MS_ASIO" },
+    { ofSoundDevice::Api::MS_DS, "MS_DS" }
+})
+
+
+//class ofSoundDevice {
+//public:
+//    enum Api {
+//        UNSPECIFIED,
+//        DEFAULT,
+//        ALSA,     /*!< The Advanced Linux Sound Architecture API. */
+//        PULSE,    /*!< The Linux PulseAudio API. */
+//        OSS,      /*!< The Linux Open Sound System API. */
+//        JACK,      /*!< The Jack Low-Latency Audio Server API. */
+//        OSX_CORE,    /*!< Macintosh OS-X Core Audio API. */
+//        MS_WASAPI, /*!< The Microsoft WASAPI API. */
+//        MS_ASIO,   /*!< The Steinberg Audio Stream I/O API. */
+//        MS_DS,     /*!< The Microsoft Direct Sound API. */
+//        NUM_APIS
+//    } api = UNSPECIFIED;
+
+//    friend std::ostream& operator << (std::ostream& os, const ofSoundDevice& dev);
+//    friend std::ostream& operator << (std::ostream& os, const std::vector<ofSoundDevice>& devs);
+
+//    /// \brief Descriptive name for the device
+//    /// This is the same string that ofSoundStream::getMatchingDevices() will be looking for
+//    std::string name{"Unknown"};
+
+//    /// \brief The device's unique ID (to be used in ofSoundStream::setDeviceID() )
+//    int deviceID = -1;
+
+//    /// \brief Number of input channels the device supports
+//    unsigned int inputChannels = 0;
+
+//    /// \brief Number of output channels the device supports
+//    unsigned int outputChannels = 0;
+
+//    /// \brief If true, this device will be used by ofSoundStream unless changed with setDeviceID()
+//    bool isDefaultInput = false;
+
+//    /// \brief If true, this device will be used by ofSoundStream unless changed with setDeviceID()
+//    bool isDefaultOutput = false;
+
+//    /// \brief List of sample rates the device claims to support
+//    std::vector<unsigned int> sampleRates;
+//};
+
+//class ofSoundStreamSettings {
+//public:
+//	virtual ~ofSoundStreamSettings() {}
+//	size_t sampleRate = 44100;
+//	size_t bufferSize = 256;
+//	size_t numBuffers = 4;
+//	size_t numInputChannels = 0;
+//	size_t numOutputChannels = 0;
+//	virtual bool setInDevice(const ofSoundDevice & device);
+//	virtual bool setOutDevice(const ofSoundDevice & device);
+//	virtual bool setApi(ofSoundDevice::Api api);
+//	virtual const ofSoundDevice * getInDevice() const;
+//	virtual const ofSoundDevice * getOutDevice() const;
+//	virtual ofSoundDevice::Api getApi() const;
+
+//	template<typename Listener>
+//	void setInListener(Listener * inListener){
+//		inCallback = std::bind(static_cast<void(Listener::*)(ofSoundBuffer &)>(&Listener::audioIn), inListener, std::placeholders::_1);
+//	}
+
+//	template<typename Listener>
+//	void setOutListener(Listener * outListener){
+//		outCallback = std::bind(static_cast<void(Listener::*)(ofSoundBuffer &)>(&Listener::audioOut), outListener, std::placeholders::_1);
+//	}
+
+//	std::function<void(ofSoundBuffer &)> inCallback;
+//	std::function<void(ofSoundBuffer &)> outCallback;
+//private:
+//	ofSoundDevice inDevice;
+//	ofSoundDevice outDevice;
+//	ofSoundDevice::Api api = ofSoundDevice::Api::UNSPECIFIED;
+//};
 
 
 #endif // OF_SERIALIZER_H
