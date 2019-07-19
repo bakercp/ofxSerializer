@@ -8,7 +8,7 @@
 #include "ofMain.h"
 #include "ofAppNoWindow.h"
 #include "ofxUnitTests.h"
-#include "ofSerializer.h"
+#include "ofxSerializer.h"
 
 
 #define test_enum_json(e) ofxTest(e == ofJson(e), "e");
