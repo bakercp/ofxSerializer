@@ -448,6 +448,70 @@ inline void from_json(const nlohmann::json& j, ofPolyline_<VertexType>& v)
 }
 
 
+// -----------------------------------------------------------------------------
+
+
+#include "ofPath.h"
+
+
+NLOHMANN_JSON_SERIALIZE_ENUM( ofPath::Command::Type, {
+    { ofPath::Command::Type::moveTo, "MOVE_TO" },
+    { ofPath::Command::Type::lineTo, "LINE_TO"},
+    { ofPath::Command::Type::curveTo, "CURVE_TO"},
+    { ofPath::Command::Type::bezierTo, "BEZIER_TO" },
+    { ofPath::Command::Type::quadBezierTo, "QUAD_BEZIER_TO"},
+    { ofPath::Command::Type::arc, "ARC"},
+    { ofPath::Command::Type::arcNegative, "ARC_NEGATIVE" },
+    { ofPath::Command::Type::close, "CLOSE"}
+})
+
+
+template<typename VertexType>
+inline void to_json(nlohmann::json& j, const ofPath::Command& v)
+{
+    j["type"] = v.type;
+    j["to"] = v.to;
+    j["cp_1"] = v.to;
+    j["cp_2"] = v.to;
+    j["radius_x"] = v.radiusX;
+    j["radius_y"] = v.radiusY;
+    j["angle_begin"] = v.angleBegin;
+    j["angle_end"] = v.angleEnd;
+}
+
+
+template<typename VertexType>
+inline void from_json(const nlohmann::json& j, ofPath::Command& v)
+{
+    // If there isn't a type member, then we want it to throw an exception.
+    ofPath::Command::Type type = j["type"];
+
+    switch (type)
+    {
+        case ofPath::Command::Type::close:
+            v = ofPath::Command(type);
+            return;
+        case ofPath::Command::Type::moveTo:
+        case ofPath::Command::Type::lineTo:
+        case ofPath::Command::Type::curveTo:
+            v = ofPath::Command(type, j["to"]);
+            return;
+        case ofPath::Command::Type::bezierTo:
+        case ofPath::Command::Type::quadBezierTo:
+            v = ofPath::Command(type, j["to"], j["cp_1"], j["cp_2"]);
+            return;
+        case ofPath::Command::Type::arc:
+        case ofPath::Command::Type::arcNegative:
+            v = ofPath::Command(type,
+                                j["to"],
+                                j["radius_x"],
+                                j["radius_y"],
+                                j["angle_begin"],
+                                j["angle_end"]);
+            return;
+    }
+}
+
 
 // -----------------------------------------------------------------------------
 
