@@ -731,4 +731,50 @@ NLOHMANN_JSON_SERIALIZE_ENUM( ofSoundDevice::Api, {
 //};
 
 
+#include "ofFbo.h"
+
+
+inline void to_json(nlohmann::json& j, const ofFboSettings& v)
+{
+    j["width"] = v.width;
+    j["height"] = v.height;
+    j["num_color_buffers"] = v.numColorbuffers;
+    j["color_formats"] = v.colorFormats;
+    j["use_depth"] = v.useDepth;
+    j["use_stencil"] = v.useStencil;
+    j["depth_stencil_as_texture"] = v.depthStencilAsTexture;
+    j["texture_target"] = v.textureTarget;
+    j["internal_format"] = v.internalformat;
+    j["depth_stencil_internal_format"] = v.depthStencilInternalFormat;
+    j["wrap_mode_horizontal"] = v.wrapModeHorizontal;
+    j["wrap_mode_vertical"] = v.wrapModeVertical;
+    j["min_filter"] = v.minFilter;
+    j["max_filter"] = v.maxFilter;
+    j["num_samples"] = v.numSamples;
+}
+
+
+inline void from_json(const nlohmann::json& j, ofFboSettings& v)
+{
+//    auto iter = j.cbegin();
+//    while (iter != j.cend())
+//    {
+//        const auto& key = iter.key();
+//        const auto& value = iter.value();
+//
+//        if (key == "position") v.setPosition(value);
+//        else if (key == "size")
+//            v.setSize(value.value("width", 100),
+//                      value.value("height", 100));
+//        else if (key == "title") v.title = value;
+//        else if (key == "window_mode") v.windowMode = value;
+//        ++iter;
+//    }
+}
+
+
+
+
+
+
 #endif // OF_SERIALIZER_H
