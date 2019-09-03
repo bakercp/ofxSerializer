@@ -793,8 +793,151 @@ inline void from_json(const nlohmann::json& j, ofFboSettings& v)
 }
 
 
+namespace ofx {
+namespace Serializer {
 
 
+inline void ApplyLoggingSettings(const nlohmann::json& settings)
+{
+    auto iter = settings.cbegin();
+    while (iter != settings.cend())
+    {
+        const auto& key = iter.key();
+        const auto& value = iter.value();
+
+        if (key == "logger")
+        {
+            std::string type = value.value("type", "console");
+
+            if (type == "console")
+            {
+                ofLogVerbose("LoadLoggingSettings") << "Console logger used.";
+                ofLogToConsole();
+            }
+            else if (type == "file")
+            {
+                std::string filename = value.value("filename", "log.log");
+                bool append = value.value("append", true);
+                ofLogVerbose("LoadLoggingSettings") << "ofLogToFile(" << filename << ", " << append << ");";
+                ofLogToFile(filename, append);
+            }
+            else
+            {
+                ofLogWarning("LoadLoggingSettings") << "Unknown logger type: " << type << ", using default console logger.";
+            }
+        }
+        else if (key == "level")
+        {
+            ofLogVerbose("LoadLoggingSettings") << "ofSetLogLevel(" << value << ");";
+            ofSetLogLevel(value);
+        }
+        else if (key == "modules")
+        {
+            auto moduleIter = value.cbegin();
+            while (moduleIter != value.cend())
+            {
+                ofLogVerbose("LoadLoggingSettings") << "ofSetLogLevel(" << moduleIter.key() << ", " << moduleIter.value() << ");";
+                ofSetLogLevel(moduleIter.key(),
+                              moduleIter.value());
+                ++moduleIter;
+            }
+        }
+        else ofLogWarning("LoadLoggingSettings") << "Unknown key: " << key;
+
+        ++iter;
+    }
+}
+
+
+inline void ApplyWindowSettings(const nlohmann::json& settings)
+{
+    auto iter = settings.cbegin();
+    while (iter != settings.cend())
+    {
+        const auto& key = iter.key();
+        const auto& value = iter.value();
+
+        if (key == "position")
+        {
+            glm::vec2 position = value;
+            ofLogVerbose("LoadWindowSettings") << "ofSetWindowPosition(" << position.x << ", " << position.y << ");";
+            ofSetWindowPosition(position.x, position.y);
+        }
+        else if (key == "size")
+        {
+            float width = value.value("width", 512);
+            float height = value.value("height", 512);
+            ofLogVerbose("LoadWindowSettings") << "ofSetWindowShape(" << width << ", " << height << ");";
+            ofSetWindowShape(width, height);
+        }
+        else if (key == "title" && !value.empty())
+        {
+            ofLogVerbose("LoadWindowSettings") << "ofSetWindowTitle(" << value << ");";
+            ofSetWindowTitle(value);
+        }
+        else if (key == "window_mode")
+        {
+            ofWindowMode mode = value;
+            bool fullscreen = (mode == OF_FULLSCREEN || mode == OF_GAME_MODE);
+            ofLogVerbose("LoadWindowSettings") << "ofSetVerticalSync(" << fullscreen << ");";
+            ofSetFullscreen(fullscreen);
+        }
+        else if (key == "vertical_sync")
+        {
+            ofLogVerbose("LoadWindowSettings") << "ofSetVerticalSync(" << value << ");";
+            ofSetVerticalSync(value);
+        }
+        else if (key == "frame_rate")
+        {
+            ofLogVerbose("LoadWindowSettings") << "ofSetFrameRate(" << value << ");";
+            ofSetFrameRate(value);
+        }
+        else if (key == "hide_cursor")
+        {
+            bool b = value;
+
+            if (b)
+            {
+                ofLogVerbose("LoadWindowSettings") << "ofHideCursor();";
+                ofHideCursor();
+            }
+            else
+            {
+                ofLogVerbose("LoadWindowSettings") << "ofShowCursor();";
+                ofShowCursor();
+            }
+        }
+        else ofLogWarning("LoadWindowSettings") << "Unknown key: " << key;
+        ++iter;
+    }
+}
+
+
+/// \brief Will load settings saved in the "app" settings.
+inline void ApplyAppSettings(const nlohmann::json& settings)
+{
+    if (settings.find("logging") != settings.end())
+        ApplyLoggingSettings(settings["logging"]);
+
+    if (settings.find("window") != settings.end())
+        ApplyWindowSettings(settings["window"]);
+
+    auto iter = settings.cbegin();
+    while (iter != settings.cend())
+    {
+        const auto& key = iter.key();
+        const auto& value = iter.value();
+
+        // We enforce the ordering above.
+        if (key == "logging") { }
+        else if (key == "window") { }
+        else ofLogWarning("LoadAppSettings") << "Unknown key: " << key;
+        ++iter;
+    }
+}
+
+
+} } // namespace ofx::Serializer
 
 
 #endif // OF_SERIALIZER_H
