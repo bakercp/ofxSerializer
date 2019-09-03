@@ -736,8 +736,8 @@ NLOHMANN_JSON_SERIALIZE_ENUM( ofSoundDevice::Api, {
 
 inline void to_json(nlohmann::json& j, const ofFboSettings& v)
 {
-    j["width"] = v.width;
-    j["height"] = v.height;
+    j["size"]["width"] = v.width;
+    j["size"]["height"] = v.height;
     j["num_color_buffers"] = v.numColorbuffers;
     j["color_formats"] = v.colorFormats;
     j["use_depth"] = v.useDepth;
@@ -756,20 +756,40 @@ inline void to_json(nlohmann::json& j, const ofFboSettings& v)
 
 inline void from_json(const nlohmann::json& j, ofFboSettings& v)
 {
-//    auto iter = j.cbegin();
-//    while (iter != j.cend())
-//    {
-//        const auto& key = iter.key();
-//        const auto& value = iter.value();
-//
-//        if (key == "position") v.setPosition(value);
-//        else if (key == "size")
-//            v.setSize(value.value("width", 100),
-//                      value.value("height", 100));
-//        else if (key == "title") v.title = value;
-//        else if (key == "window_mode") v.windowMode = value;
-//        ++iter;
-//    }
+    if (j.count("size"))
+    {
+        int w = j["size"].value("width", 0);
+        int h = j["size"].value("height", 0);
+
+        if (w > 0 && h > 0)
+        {
+            v.width = w;
+            v.height = h;
+        }
+        else
+        {
+            ofLogWarning("from_json") << "Invalid width and/or height: " << w << ", " << h;
+        }
+    }
+
+    v.numColorbuffers = j.value("num_color_buffers", 1);
+    v.colorFormats = j.value("color_formats", std::vector<GLint>());
+    v.useDepth = j.value("use_depth", false);
+    v.useStencil = j.value("use_stencil", false);
+    v.depthStencilAsTexture = j.value("depth_stencil_as_texture", false);
+    v.textureTarget =
+#ifndef TARGET_OPENGLES
+    v.textureTarget = j.value("texture_target", ofGetUsingArbTex() ? GL_TEXTURE_RECTANGLE_ARB : GL_TEXTURE_2D);
+#else
+    v.textureTarget = j.value("texture_target", GL_TEXTURE_2D);
+#endif
+    v.internalformat = j.value("internal_format", GL_RGBA);
+    v.depthStencilInternalFormat = j.value("depth_stencil_internal_format", GL_DEPTH_COMPONENT24);
+    v.wrapModeHorizontal = j.value("wrap_mode_horizontal", GL_CLAMP_TO_EDGE);
+    v.wrapModeVertical = j.value("wrap_mode_vertical", GL_CLAMP_TO_EDGE);
+    v.minFilter = j.value("min_filter", GL_LINEAR);
+    v.maxFilter = j.value("max_filter", GL_LINEAR);
+    v.numSamples = j.value("num_samples", 0);
 }
 
 
